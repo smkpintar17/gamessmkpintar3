@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GAMES INTERAKTIF SMK PINTAR</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div>
+      <div class="brand">GAMES INTERAKTIF SMK PINTAR</div>
+      <small>SMK 17 MUNCAR • RPL</small>
+    </div>
+    <div id="playerBadge" class="badge hidden"></div>
+  </header>
+
+  <main class="container">
+    <section id="authScreen" class="screen">
+      <div class="card auth-card">
+        <h1>🎮 GAMES INTERAKTIF SMK PINTAR</h1>
+        <p class="muted">Game edukatif RPL untuk Kelas X, XI, dan XII.</p>
+        <div class="tabs">
+          <button class="tab active" data-tab="login">Login</button>
+          <button class="tab" data-tab="register">Daftar</button>
+        </div>
+
+        <form id="loginForm" class="form">
+          <label>Username<input id="loginUsername" required autocomplete="username" placeholder="Username"></label>
+          <label>Password<input id="loginPassword" required type="password" autocomplete="current-password" placeholder="Password"></label>
+          <button class="primary" type="submit">🚀 MASUK & MULAI</button>
+          <p id="loginMsg" class="msg"></p>
+        </form>
+
+        <form id="registerForm" class="form hidden">
+          <label>Nama Lengkap<input id="regName" required placeholder="Nama lengkap"></label>
+          <label>Kelas
+            <select id="regClass" required>
+              <option value="">Pilih kelas</option>
+              <option>X RPL</option>
+              <option>XI RPL</option>
+              <option>XII RPL</option>
+            </select>
+          </label>
+          <label>Username<input id="regUsername" required minlength="4" placeholder="Contoh: willyrpl"></label>
+          <label>Password<input id="regPassword" required minlength="4" type="password" placeholder="Minimal 4 karakter"></label>
+          <button class="primary" type="submit">✨ DAFTAR & LOGIN OTOMATIS</button>
+          <p class="hint">Data login demo tersimpan di perangkat ini. Data hasil belajar dapat dikirim ke Google Sheets setelah URL Apps Script diisi.</p>
+          <p id="registerMsg" class="msg"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="dashboardScreen" class="screen hidden">
+      <div class="card">
+        <div class="welcome">
+          <div><span class="eyebrow">SELAMAT DATANG</span><h2 id="welcomeName"></h2><p id="welcomeClass" class="muted"></p></div>
+          <button id="logoutBtn" class="ghost">Keluar</button>
+        </div>
+        <div class="stats">
+          <div><b id="progressStat">0/23</b><span>Level selesai</span></div>
+          <div><b id="scoreStat">0</b><span>Skor</span></div>
+          <div><b id="difficultyStat">Pemula</b><span>Progress</span></div>
+        </div>
+        <h3>Pilih Level</h3>
+        <div id="levelGrid" class="level-grid"></div>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen hidden">
+      <div class="card">
+        <div class="game-head">
+          <button id="backDashboard" class="ghost">← Level</button>
+          <div>
+            <span id="levelLabel" class="eyebrow"></span>
+            <h2 id="levelTitle"></h2>
+          </div>
+          <span id="difficultyLabel" class="pill"></span>
+        </div>
+        <div class="progressbar"><div id="levelProgress"></div></div>
+        <canvas id="gameCanvas" width="900" height="500"></canvas>
+        <div class="mobile-controls">
+          <button data-key="ArrowLeft">◀</button><button data-key="Space">●</button><button data-key="ArrowRight">▶</button>
+        </div>
+        <div id="gameInfo" class="game-info"></div>
+      </div>
+    </section>
+
+    <section id="questionScreen" class="screen hidden">
+      <div class="card question-card">
+        <span id="questionLevel" class="eyebrow"></span>
+        <h2 id="questionTitle"></h2>
+        <p id="questionText"></p>
+        <div id="answers"></div>
+        <textarea id="essayAnswer" class="essay hidden" placeholder="Tulis jawaban dengan jujur dan jelas..."></textarea>
+        <button id="submitAnswer" class="primary">KIRIM JAWABAN</button>
+        <p id="questionMsg" class="msg"></p>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="screen hidden">
+      <div class="card result-card">
+        <div class="result-icon">🏆</div>
+        <h2 id="resultTitle"></h2>
+        <p id="resultText"></p>
+        <div class="result-score" id="resultScore"></div>
+        <button id="nextBtn" class="primary">LANJUTKAN</button>
+      </div>
+    </section>
+  </main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
