@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RPG SMK PINTAR — RPL</title>
+  <meta name="description" content="Game edukatif 2D RPG SMK PINTAR untuk peserta didik RPL SMK 17 Muncar.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <div id="toast" class="toast"></div>
+
+  <section id="authView" class="screen">
+    <div class="auth-card">
+      <div class="brand">
+        <div class="logo">⚡</div>
+        <div><h1>RPG SMK PINTAR</h1><p>Game Edukatif RPL • SMK 17 Muncar</p></div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-auth="login">Masuk</button>
+        <button class="tab" data-auth="register">Daftar</button>
+      </div>
+
+      <form id="loginForm" class="auth-form">
+        <label>Username<input id="loginUser" required autocomplete="username" placeholder="username"></label>
+        <label>Password<input id="loginPass" required type="password" autocomplete="current-password" placeholder="password"></label>
+        <button class="primary big">🚀 Masuk ke Dunia RPL</button>
+        <p class="muted small">Akun yang pernah masuk di perangkat ini dapat masuk otomatis.</p>
+      </form>
+
+      <form id="registerForm" class="auth-form hidden">
+        <label>Nama Lengkap<input id="regName" required maxlength="80" placeholder="Nama lengkap"></label>
+        <label>Kelas
+          <select id="regClass" required>
+            <option value="">Pilih kelas</option><option value="X RPL">X RPL</option>
+            <option value="XI RPL">XI RPL</option><option value="XII RPL">XII RPL</option>
+          </select>
+        </label>
+        <label>Username<input id="regUser" required maxlength="30" pattern="[A-Za-z0-9._-]+" placeholder="contoh: budi.rpl"></label>
+        <label>Password<input id="regPass" required type="password" minlength="6" maxlength="80" placeholder="minimal 6 karakter"></label>
+        <label>Konfirmasi Password<input id="regPass2" required type="password" minlength="6" maxlength="80"></label>
+        <button class="primary big">✨ Buat Akun & Mulai</button>
+      </form>
+
+      <div class="connection">
+        <span id="connectionDot">●</span> <span id="connectionText">Mode offline siap</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="gameView" class="hidden">
+    <header class="topbar">
+      <div class="brand-mini"><span class="logo small-logo">⚡</span><b>RPG SMK PINTAR</b></div>
+      <div class="player-info">
+        <span id="playerName"></span><span id="playerClass" class="pill"></span>
+        <button id="logoutBtn" class="ghost">Keluar</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="homeScreen" class="panel">
+        <div class="hero">
+          <div>
+            <p class="eyebrow">PETUALANGAN DIGITAL</p>
+            <h2>Selamat datang, <span id="welcomeName"></span>!</h2>
+            <p>Taklukkan 50 misi coding. Setelah tiap misi, jawab tantangan RPL. Level 51–53 adalah zona bonus & refleksi.</p>
+          </div>
+          <div class="hero-art">🧑‍💻<span>⚙️</span></div>
+        </div>
+        <div class="stats">
+          <div><b id="statLevel">1</b><small>Level terbuka</small></div>
+          <div><b id="statScore">0</b><small>Skor</small></div>
+          <div><b id="statSolved">0</b><small>Misi selesai</small></div>
+        </div>
+        <div class="section-head"><h3>Peta Petualangan</h3><span id="progressText"></span></div>
+        <div id="levelGrid" class="level-grid"></div>
+      </section>
+
+      <section id="gameScreen" class="panel hidden">
+        <div class="game-head">
+          <button id="backMap" class="ghost">← Peta</button>
+          <div><b id="levelTitle">Level 1</b><span id="levelDesc"></span></div>
+          <div class="hud"><span>❤️ <b id="lives">3</b></span><span>⭐ <b id="gameScore">0</b></span><span>⏱ <b id="timer">60</b></span></div>
+        </div>
+        <div class="game-layout">
+          <div class="canvas-wrap">
+            <canvas id="gameCanvas" width="900" height="520" aria-label="Arena game 2D"></canvas>
+            <div id="gameOverlay" class="game-overlay hidden"></div>
+          </div>
+          <aside class="mission-card">
+            <h3>🎯 Misi</h3><p id="missionText"></p>
+            <div class="controls">
+              <b>Kontrol</b><span>← → / A D: gerak</span><span>SPACE / klik: tembak</span><span>Hindari meteor & kumpulkan chip!</span>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="quizScreen" class="panel hidden">
+        <div class="quiz-card">
+          <div class="quiz-top"><span id="quizLevel" class="pill"></span><span id="quizScore"></span></div>
+          <h2 id="quizTitle">Tantangan RPL</h2>
+          <p id="quizQuestion"></p>
+          <div id="quizOptions"></div>
+          <textarea id="essayAnswer" class="hidden" rows="7" placeholder="Tuliskan jawabanmu dengan jujur dan jelas..."></textarea>
+          <button id="submitQuiz" class="primary big">Kirim Jawaban</button>
+          <div id="quizFeedback" class="feedback hidden"></div>
+        </div>
+      </section>
+
+      <section id="resultScreen" class="panel hidden">
+        <div class="result-card">
+          <div class="result-icon">🏆</div><h2 id="resultTitle"></h2><p id="resultText"></p>
+          <div class="result-actions"><button id="nextLevel" class="primary big"></button><button id="resultMap" class="ghost big">Kembali ke Peta</button></div>
+        </div>
+      </section>
+    </main>
+  </section>
+</div>
+<script src="config.js"></script>
+<script src="questions.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
