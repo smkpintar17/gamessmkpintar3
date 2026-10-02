@@ -1,131 +1,451 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#07111f">
-  <title>RPG SMK PINTAR — SMK 17 Muncar</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GAMES INTERAKTIF SMK PINTAR</title>
+    <!-- Phaser 3 Engine -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #1a1a2e;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        #app-container {
+            width: 100%;
+            max-width: 800px;
+            height: 100vh;
+            max-height: 600px;
+            position: relative;
+            background: #16213e;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        /* Style Form Login & Soal */
+        .overlay-screen {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(22, 33, 62, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 10;
+        }
+        .form-card {
+            background: #0f3460;
+            padding: 25px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        h2 { margin-bottom: 15px; color: #e94560; font-size: 20px; }
+        input, select, textarea, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: 1px solid #1a1a2e;
+            font-size: 14px;
+        }
+        input, select, textarea {
+            background: #1a1a2e;
+            color: #fff;
+        }
+        button {
+            background: #e94560;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover { background: #ff6b81; }
+        .option-btn {
+            background: #16213e;
+            text-align: left;
+            margin: 6px 0;
+        }
+        .option-btn:hover { background: #0f3460; }
+        /* Virtual Controller Mobile */
+        #touch-controls {
+            position: absolute;
+            bottom: 15px; left: 0; right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 5;
+            pointer-events: none;
+        }
+        .btn-dir {
+            width: 50px; height: 50px;
+            background: rgba(233, 69, 96, 0.6);
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            pointer-events: auto;
+        }
+        .hidden { display: none !important; }
+    </style>
 </head>
 <body>
-<div id="app">
-  <section id="authView" class="screen">
-    <div class="auth-card">
-      <div class="brand">🎮 RPG <span>SMK PINTAR</span></div>
-      <p class="subtitle">Game Edukatif RPL • SMK 17 Muncar</p>
 
-      <div class="tabs">
-        <button class="tab active" data-tab="login">Masuk</button>
-        <button class="tab" data-tab="register">Daftar</button>
-      </div>
-
-      <form id="loginForm" class="auth-form">
-        <label>Username
-          <input id="loginUsername" required autocomplete="username" placeholder="Masukkan username">
-        </label>
-        <label>Password
-          <input id="loginPassword" type="password" required autocomplete="current-password" placeholder="Masukkan password">
-        </label>
-        <button class="primary" type="submit">🚀 Masuk & Main</button>
-        <p id="loginMsg" class="msg"></p>
-      </form>
-
-      <form id="registerForm" class="auth-form hidden">
-        <label>Nama Lengkap
-          <input id="regName" required maxlength="80" placeholder="Nama lengkap siswa">
-        </label>
-        <label>Kelas
-          <select id="regClass" required>
-            <option value="">Pilih kelas</option>
-            <option>X RPL</option><option>XI RPL</option><option>XII RPL</option>
-          </select>
-        </label>
-        <label>Username
-          <input id="regUsername" required minlength="3" maxlength="30" pattern="[A-Za-z0-9._-]+" placeholder="contoh: budi.rpl">
-        </label>
-        <label>Password
-          <input id="regPassword" type="password" required minlength="6" placeholder="Minimal 6 karakter">
-        </label>
-        <label>Konfirmasi Password
-          <input id="regPassword2" type="password" required minlength="6">
-        </label>
-        <button class="primary" type="submit">✨ Daftar & Masuk Otomatis</button>
-        <p id="regMsg" class="msg"></p>
-      </form>
-      <small class="privacy">Data tugas/kuis dapat dikirim ke Google Sheets sekolah melalui URL Apps Script yang Anda pasang di <code>app.js</code>.</small>
-    </div>
-  </section>
-
-  <section id="menuView" class="screen hidden">
-    <header class="topbar">
-      <div><b>RPG SMK PINTAR</b><span id="welcome"></span></div>
-      <button id="logoutBtn" class="ghost">Keluar</button>
-    </header>
-    <main class="menu-wrap">
-      <div class="hero-card">
-        <div>
-          <div class="eyebrow">SMK 17 Muncar</div>
-          <h1>Jelajahi Dunia RPL</h1>
-          <p>Lewati labirin, kumpulkan data, hindari bug, lalu jawab soal RPL setelah setiap level.</p>
+<div id="app-container">
+    <!-- Form Auth / Login -->
+    <div id="auth-screen" class="overlay-screen">
+        <div class="form-card">
+            <h2>SMK 17 MUNCAR<br><small style="font-size:12px; color:#aaa;">GAMES INTERAKTIF SMK PINTAR</small></h2>
+            <input type="text" id="reg-fullname" placeholder="Nama Lengkap" required>
+            <select id="reg-class" required>
+                <option value="">-- Pilih Kelas --</option>
+                <option value="X RPL">X RPL</option>
+                <option value="XI RPL">XI RPL</option>
+                <option value="XII RPL">XII RPL</option>
+            </select>
+            <input type="text" id="reg-username" placeholder="Username" required>
+            <input type="password" id="reg-password" placeholder="Password" required>
+            <button onclick="handleRegister()">Daftar & Main Langsung</button>
         </div>
-        <div class="hero-icon">👾</div>
-      </div>
-      <div class="stats">
-        <div><b id="menuLevel">1</b><span>Level</span></div>
-        <div><b id="menuScore">0</b><span>Skor</span></div>
-        <div><b id="menuStars">0</b><span>Bintang</span></div>
-      </div>
-      <button id="playBtn" class="primary big">🎮 Lanjut Bermain</button>
-      <div class="level-grid" id="levelGrid"></div>
-      <div class="bonus-list">
-        <h3>🌟 Level Refleksi</h3>
-        <p>Level 51–53 berisi esai tentang harapan, keinginan, dan pengembangan diri dalam memilih RPL.</p>
-        <button class="secondary" data-level="51">Level 51 — Harapan</button>
-        <button class="secondary" data-level="52">Level 52 — Keinginan</button>
-        <button class="secondary" data-level="53">Level 53 — Rencana Pengembangan</button>
-      </div>
-    </main>
-  </section>
-
-  <section id="gameView" class="screen hidden">
-    <header class="gamebar">
-      <button id="backMenu" class="ghost">☰ Menu</button>
-      <div class="game-title">RPG SMK PINTAR</div>
-      <div class="game-stats">Lv <b id="gameLevel">1</b> · ❤️ <b id="lives">3</b> · ⭐ <b id="gameScore">0</b></div>
-    </header>
-    <div class="game-area">
-      <div class="canvas-shell"><canvas id="gameCanvas" width="800" height="640"></canvas></div>
-      <div class="controls">
-        <button class="dpad up" data-dir="up">▲</button>
-        <button class="dpad left" data-dir="left">◀</button>
-        <button class="dpad down" data-dir="down">▼</button>
-        <button class="dpad right" data-dir="right">▶</button>
-      </div>
-      <p class="hint">Keyboard: WASD / tombol panah · P = jeda · Kumpulkan semua data sebelum waktu habis.</p>
     </div>
-  </section>
 
-  <div id="quizModal" class="modal hidden">
-    <div class="modal-card">
-      <div class="modal-head"><span id="quizBadge">LEVEL 1</span><b id="quizProgress">1/3</b></div>
-      <h2 id="quizTitle">Pertanyaan</h2>
-      <p id="quizQuestion"></p>
-      <div id="quizOptions"></div>
-      <textarea id="essayAnswer" class="essay hidden" maxlength="2000" placeholder="Tuliskan jawaban dengan jujur..."></textarea>
-      <button id="submitQuiz" class="primary">Kirim Jawaban</button>
-      <p id="quizMsg" class="msg"></p>
+    <!-- Container Quiz (Level 1 - 20) -->
+    <div id="quiz-screen" class="overlay-screen hidden">
+        <div class="form-card">
+            <h3 id="quiz-title" style="color:#e94560; margin-bottom:10px;">Soal Evaluasi</h3>
+            <p id="quiz-question" style="margin-bottom:15px; text-align:left;"></p>
+            <div id="quiz-options"></div>
+        </div>
     </div>
-  </div>
 
-  <div id="resultModal" class="modal hidden">
-    <div class="modal-card result-card">
-      <div class="result-icon">🏆</div>
-      <h2 id="resultTitle">Level Selesai!</h2>
-      <p id="resultText"></p>
-      <button id="resultNext" class="primary">Lanjut</button>
+    <!-- Container Refleksi (Level 21 - 23) -->
+    <div id="reflection-screen" class="overlay-screen hidden">
+        <div class="form-card">
+            <h3 id="ref-title" style="color:#e94560; margin-bottom:10px;">Refleksi & Harapan</h3>
+            <p id="ref-question" style="margin-bottom:10px; text-align:left; font-size:13px;"></p>
+            <textarea id="ref-answer" rows="4" placeholder="Tuliskan jawaban jujurmu di sini..."></textarea>
+            <button onclick="submitReflection()">Kirim & Lanjut Level</button>
+        </div>
     </div>
-  </div>
+
+    <!-- Game Canvas -->
+    <div id="game-container"></div>
+
+    <!-- Touch Control untuk Smartphone -->
+    <div id="touch-controls" class="hidden">
+        <div>
+            <div class="btn-dir" id="btn-left">◀</div>
+            <div class="btn-dir" id="btn-right">▶</div>
+        </div>
+        <div>
+            <div class="btn-dir" id="btn-jump">▲</div>
+        </div>
+    </div>
 </div>
-<script src="app.js"></script>
+
+<script>
+// --- CONFIGURATION & GLOBAL STATE ---
+const APPS_SCRIPT_URL = "URL_GOOGLE_APPS_SCRIPT_ANDA"; // Ganti dengan URL Google Apps Script Anda
+
+let currentUser = null;
+let currentLevel = 1;
+const totalLevels = 23;
+
+// Bank Soal RPL untuk Level 1-20
+const quizBank = [
+    { q: "Apa kepanjangan dari HTML?", a: ["Hyper Text Markup Language", "High Tech Main Language", "Hyperlink Text Mode Logic"], c: 0 },
+    { q: "Tag HTML mana yang digunakan untuk membuat judul terbesar?", a: ["<h6>", "<head>", "<h1>"], c: 2 },
+    { q: "CSS digunakan untuk...", a: ["Logika Server", "Desain & Tampilan Web", "Pengolahan Database"], c: 1 },
+    { q: "Simbol komentar pada JavaScript adalah...", a: ["//", "<!-- -->", "/* */"], c: 0 },
+    { q: "Perintah SQL untuk mengambil data dari tabel adalah...", a: ["GET", "SELECT", "EXTRACT"], c: 1 },
+    { q: "Data type yang menyimpan nilai True/False adalah...", a: ["String", "Boolean", "Integer"], c: 1 },
+    { q: "Di bawah ini yang merupakan bahasa pemrograman OOP adalah...", a: ["Java", "HTML", "CSS"], c: 0 },
+    { q: "Port default untuk HTTP adalah...", a: ["21", "80", "443"], c: 1 },
+    { q: "Framework JavaScript populer untuk Frontend adalah...", a: ["Laravel", "React", "Django"], c: 1 },
+    { q: "Perintah git untuk mendownload repository dari GitHub adalah...", a: ["git pull", "git clone", "git push"], c: 1 },
+    { q: "Tag untuk membuat baris baru pada HTML adalah...", a: ["<lb>", "<br>", "<newline>"], c: 1 },
+    { q: "Dalam Basis Data, kepanjangan PK adalah...", a: ["Public Key", "Primary Key", "Private Key"], c: 1 },
+    { q: "Atribut HTML untuk menentukan link tujuan pada tag <a> adalah...", a: ["src", "href", "link"], c: 1 },
+    { q: "Array pada pemrograman dimulai dari indeks ke-...", a: ["1", "0", "-1"], c: 1 },
+    { q: "Istilah perbaikan kesalahan/bug dalam program dinamakan...", a: ["Compiling", "Debugging", "Running"], c: 1 },
+    { q: "Metode HTTP yang digunakan untuk mengirim data secara aman pada form adalah...", a: ["GET", "POST", "PUT"], c: 1 },
+    { q: "Elemen yang digunakan untuk membungkus konten pada CSS Flexbox/Grid dinamakan...", a: ["Container", "Wrapper", "Box"], c: 0 },
+    { q: "Command Linux untuk melihat direktori saat ini adalah...", a: ["cd", "pwd", "ls"], c: 1 },
+    { q: "Fungsi dari 'git commit' adalah...", a: ["Mengirim ke cloud", "Menyimpan perubahan lokal", "Menghapus revisi"], c: 1 },
+    { q: "Apa kepanjangan dari RPL?", a: ["Rekayasa Perangkat Lain", "Rancangan Perangkat Lunak", "Rekayasa Perangkat Lunak"], c: 2 }
+];
+
+// Pertanyaan Refleksi Level 21-23 (Khusus SMK 17 Muncar)
+const reflectionBank = [
+    { title: "Level 21: Refleksi Diri & Sekolah", q: "Tuliskan secara jujur, apa harapan dan keinginanmu bagi sekolah SMK 17 Muncar ke depannya?" },
+    { title: "Level 22: Pengembangan RPL", q: "Apa hal/teknologi baru yang paling ingin kamu kembangkan atau pelajari selama memilih Program Keahlian RPL?" },
+    { title: "Level 23: Pesan & Kesan", q: "Berikan saran jujurmu agar pembelajaran RPL di SMK 17 Muncar bisa lebih seru dan interaktif!" }
+];
+
+// --- AUTH SYSTEM (LOGIN OTOMATIS) ---
+window.onload = () => {
+    const savedUser = localStorage.getItem('smk_pintar_user');
+    if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        document.getElementById('auth-screen').classList.add('hidden');
+        initGame();
+    }
+    if ('ontouchstart' in window) {
+        document.getElementById('touch-controls').classList.remove('hidden');
+    }
+};
+
+function handleRegister() {
+    const name = document.getElementById('reg-fullname').value;
+    const cls = document.getElementById('reg-class').value;
+    const user = document.getElementById('reg-username').value;
+    const pass = document.getElementById('reg-password').value;
+
+    if (!name || !cls || !user || !pass) {
+        alert("Harap isi semua formulir!");
+        return;
+    }
+
+    currentUser = { name, class: cls, user };
+    localStorage.setItem('smk_pintar_user', JSON.stringify(currentUser));
+    
+    // Simpan data pendaftaran ke spreadsheet
+    sendToSheets({
+        nama: name,
+        kelas: cls,
+        tipe: "REGISTER",
+        level: "-",
+        jawaban_atau_skor: "Berhasil Registrasi"
+    });
+
+    document.getElementById('auth-screen').classList.add('hidden');
+    initGame();
+}
+
+function sendToSheets(data) {
+    if(APPS_SCRIPT_URL === "URL_GOOGLE_APPS_SCRIPT_ANDA") return;
+    fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }).catch(err => console.error("Error Sheet:", err));
+}
+
+// --- GAME LOGIC (PHASER 3 ENGINE) ---
+let game, phaserScene;
+
+function initGame() {
+    const config = {
+        type: Phaser.AUTO,
+        parent: 'game-container',
+        width: 800,
+        height: 600,
+        scale: {
+            mode: Phaser.Scale.FIT,
+            autoCenter: Phaser.Scale.CENTER_BOTH
+        },
+        physics: {
+            default: 'arcade',
+            arcade: { gravity: { y: 600 }, debug: false }
+        },
+        scene: MainScene
+    };
+    game = new Phaser.Game(config);
+}
+
+class MainScene extends Phaser.Scene {
+    constructor() { super({ key: 'MainScene' }); }
+
+    preload() {
+        // Asset placeholder berbasis data URL SVG agar game langsung berjalan tanpa file eksternal
+        this.load.image('ground', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAXSURBVEhLY2BgYPgPxFQBjAoeVY8KCgAAk/8B321f64sAAAAASUVORK5CYII=');
+        this.load.image('star', 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBvbHlnb24gcG9pbnRzPSIxMiwyIDE1LDkgMjIsOSAxNywxNCAxOSwyMSAxMiwxNyA1LDIxIDcsMTQgMiw5IDksOSIgZmlsbD0ieWVsbG93Ii8+PC9zdmc+');
+        this.load.image('player', 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiBmaWxsPSIjZTk0NTYwIiByeT0iNCIvPjwvc3ZnPg==');
+    }
+
+    create() {
+        phaserScene = this;
+        this.add.text(16, 16, `Pemain: ${currentUser.name} (${currentUser.class})`, { fontSize: '16px', fill: '#fff' });
+        this.levelText = this.add.text(16, 40, `Level: ${currentLevel} / ${totalLevels}`, { fontSize: '18px', fill: '#e94560', fontWeight: 'bold' });
+
+        // Platforms & Level Design (Kesulitan bertambah sesuai currentLevel)
+        this.platforms = this.physics.add.staticGroup();
+        
+        // Tanah Dasar
+        for(let x = 0; x < 800; x += 32) {
+            this.platforms.create(x, 584, 'ground').setScale(2).refreshBody();
+        }
+
+        // Rintangan dinamis berdasarkan level
+        let speedMult = 1 + (currentLevel * 0.1);
+        let gap = Math.max(100, 200 - (currentLevel * 4));
+
+        this.platforms.create(200, 450, 'ground').setScale(3, 1).refreshBody();
+        this.platforms.create(200 + gap, 330, 'ground').setScale(3, 1).refreshBody();
+        if(currentLevel > 5) {
+            this.platforms.create(100, 220, 'ground').setScale(2, 1).refreshBody();
+        }
+
+        // Player Setup
+        this.player = this.physics.add.sprite(50, 450, 'player');
+        this.player.setCollideWorldBounds(true);
+        this.physics.add.collider(this.player, this.platforms);
+
+        // Target (Bintang Finish)
+        this.finishTarget = this.physics.add.sprite(730, 100, 'star');
+        this.platforms.create(730, 140, 'ground').setScale(2, 1).refreshBody();
+        this.physics.add.collider(this.finishTarget, this.platforms);
+
+        // Overlap Finish Event
+        this.physics.add.overlap(this.player, this.finishTarget, this.reachFinish, null, this);
+
+        // Control Inputs
+        this.cursors = this.input.keyboard.createCursorKeys();
+        
+        // Touch Input Binding
+        this.touchMoveLeft = false;
+        this.touchMoveRight = false;
+        this.setupTouchControls();
+    }
+
+    update() {
+        if (!this.player) return;
+
+        if (this.cursors.left.isDown || this.touchMoveLeft) {
+            this.player.setVelocityX(-160 - (currentLevel * 5));
+        } else if (this.cursors.right.isDown || this.touchMoveRight) {
+            this.player.setVelocityX(160 + (currentLevel * 5));
+        } else {
+            this.player.setVelocityX(0);
+        }
+
+        if ((this.cursors.up.isDown || this.touchJump) && this.player.body.touching.down) {
+            this.player.setVelocityY(-400);
+            this.touchJump = false;
+        }
+    }
+
+    setupTouchControls() {
+        const bindTouch = (id, startFn, endFn) => {
+            const el = document.getElementById(id);
+            el.addEventListener('touchstart', (e) => { e.preventDefault(); startFn(); });
+            el.addEventListener('touchend', (e) => { e.preventDefault(); endFn(); });
+        };
+
+        bindTouch('btn-left', () => this.touchMoveLeft = true, () => this.touchMoveLeft = false);
+        bindTouch('btn-right', () => this.touchMoveRight = true, () => this.touchMoveRight = false);
+        bindTouch('btn-jump', () => this.touchJump = true, () => this.touchJump = false);
+    }
+
+    reachFinish() {
+        this.physics.pause();
+        if (currentLevel <= 20) {
+            showQuizScreen();
+        } else {
+            showReflectionScreen();
+        }
+    }
+}
+
+// --- SOAL EVALUASI & REFLEKSI CONTROLLER ---
+function showQuizScreen() {
+    const qData = quizBank[currentLevel - 1] || quizBank[0];
+    document.getElementById('quiz-title').innerText = `Level ${currentLevel} Selesai! Evaluation Quiz`;
+    document.getElementById('quiz-question').innerText = qData.q;
+    
+    const optsDiv = document.getElementById('quiz-options');
+    optsDiv.innerHTML = '';
+    
+    qData.a.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = `${String.fromCharCode(65 + idx)}. ${opt}`;
+        btn.onclick = () => answerQuiz(idx === qData.c);
+        optsDiv.appendChild(btn);
+    });
+
+    document.getElementById('quiz-screen').classList.remove('hidden');
+}
+
+function answerQuiz(isCorrect) {
+    document.getElementById('quiz-screen').classList.add('hidden');
+    
+    sendToSheets({
+        nama: currentUser.name,
+        kelas: currentUser.class,
+        tipe: "LOG_SKOR",
+        level: currentLevel,
+        jawaban_atau_skor: isCorrect ? "BENAR" : "SALAH"
+    });
+
+    if (isCorrect) {
+        alert("Jawaban Benar! Lanjut Ke Level Berikutnya.");
+        nextLevel();
+    } else {
+        alert("Jawaban Salah! Ulangi Level Ini.");
+        phaserScene.scene.restart();
+    }
+}
+
+function showReflectionScreen() {
+    const refData = reflectionBank[currentLevel - 21];
+    document.getElementById('ref-title').innerText = refData.title;
+    document.getElementById('ref-question').innerText = refData.q;
+    document.getElementById('ref-answer').value = '';
+    
+    document.getElementById('reflection-screen').classList.remove('hidden');
+}
+
+function submitReflection() {
+    const ans = document.getElementById('ref-answer').value;
+    if (!ans.trim()) {
+        alert("Mohon isi jawaban esai/harapan Anda secara jujur!");
+        return;
+    }
+
+    sendToSheets({
+        nama: currentUser.name,
+        kelas: currentUser.class,
+        tipe: "REFLEKSI",
+        level: currentLevel,
+        jawaban_atau_skor: "-",
+        harapan: ans
+    });
+
+    document.getElementById('reflection-screen').classList.add('hidden');
+    
+    if (currentLevel >= totalLevels) {
+        alert("Selamat! Anda Telah Menyelesaikan SELURUH LEVEL GAMES INTERAKTIF SMK PINTAR!");
+        currentLevel = 1;
+        phaserScene.scene.restart();
+    } else {
+        nextLevel();
+    }
+}
+
+function nextLevel() {
+    currentLevel++;
+    phaserScene.scene.restart();
+}
+</script>
 </body>
 </html>
