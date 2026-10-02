@@ -2,7 +2,7 @@
    URL Apps Script harus URL biasa, bukan Markdown.
 */
 const CONFIG = {
-  GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzvxs28jbOitfqD3oW4GI1XCmDCOreQLCNRnT9gumFPDMukT27YiWMB5laRtSKVYcNG1Q/exec",
+  GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxLqOWDGYNOkjDgxknnlc2t5yyRvUJLV9X2sWoiwLs7K2oWtCuRQ2gOpTSCAaKmBmrnvA/exec",
   SCHOOL_NAME: "SMK 17 Muncar",
   GAME_NAME: "RPG SMK PINTAR"
 };
