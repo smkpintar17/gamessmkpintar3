@@ -1,4 +1,4 @@
-const CONFIG={SHEET_WEB_APP_URL:"PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",STORAGE_KEY:"smk_pintar_players_v1"};
+const CONFIG={SHEET_WEB_APP_URL:"https://script.google.com/macros/s/AKfycbyZtzieh57dFOuRxLXevNkhUIZmFAk8xfKfbaxrbdtE6aymHUw4mst6drXdOx24zsYzWQ/exec",STORAGE_KEY:"smk_pintar_players_v1"};
 const classes=["X RPL","XI RPL","XII RPL"];
 const levelData=[
 ["Level 1","RPL Starter","Mudah","Pengenalan coding & komputer","Apa yang dimaksud dengan algoritma?",["Langkah-langkah logis untuk menyelesaikan masalah","Nama perangkat keras","Bahasa pemrograman saja","Jaringan internet"],0],
