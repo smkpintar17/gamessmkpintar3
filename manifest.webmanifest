@@ -1,0 +1,11 @@
+{
+  "name": "Games Interaktif SMK Pintar",
+  "short_name": "SMK Pintar RPL",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "orientation": "portrait",
+  "description": "Game edukatif RPL SMK 17 Muncar untuk Android.",
+  "icons": []
+}
